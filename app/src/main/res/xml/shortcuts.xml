@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Long-press the launcher icon to jump straight to a task. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="add_expense"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/shortcut_expense_short"
+        android:shortcutLongLabel="@string/shortcut_expense_long">
+        <intent
+            android:action="com.expensetracker.QUICK_ADD"
+            android:targetPackage="com.expensetracker"
+            android:targetClass="com.expensetracker.MainActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="import_message"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/shortcut_import_short"
+        android:shortcutLongLabel="@string/shortcut_import_long">
+        <intent
+            android:action="com.expensetracker.QUICK_IMPORT"
+            android:targetPackage="com.expensetracker"
+            android:targetClass="com.expensetracker.MainActivity" />
+    </shortcut>
+</shortcuts>

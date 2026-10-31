@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_bg"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/widget_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#7A8A82"
+        android:text="This month" />
+
+    <TextView
+        android:id="@+id/widget_spent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#16191C"
+        android:text="—" />
+
+    <TextView
+        android:id="@+id/widget_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#12805C"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/widget_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/widget_button"
+        android:gravity="center"
+        android:paddingTop="9dp"
+        android:paddingBottom="9dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#0B3D2C"
+        android:text="+  Add" />
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- upward trend bars -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M34,66 h8 v12 h-8 z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M48,58 h8 v20 h-8 z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M62,48 h8 v30 h-8 z" />
+    <!-- rupee mark -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M38,30 h32 v5 h-11.4 a10.5,10.5 0 0,1 1.9,5 h9.5 v5 h-9.5 a11,11 0 0,1 -10.6,9 h-1.2 l14.6,13.5 h-8.1 l-15.2,-14.1 v-4.4 h8.9 a6.2,6.2 0 0,0 6,-4 h-15 v-5 h15 a6.2,6.2 0 0,0 -6,-5 h-8.9 z" />
+</vector>

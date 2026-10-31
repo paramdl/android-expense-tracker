@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Lite edition: strips SMS entirely.
+
+  Google's enhanced fraud protection blocks sideloading of apps that declare SMS
+  permissions, so this variant removes both the permissions and the broadcast
+  receiver at manifest-merge time. Everything else in the app is identical.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
+
+    <application>
+        <receiver android:name=".data.sms.SmsReceiver" tools:node="remove" />
+    </application>
+</manifest>

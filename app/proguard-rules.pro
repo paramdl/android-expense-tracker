@@ -1,0 +1,3 @@
+-keep class com.expensetracker.data.** { *; }
+-keepclassmembers class * extends android.content.BroadcastReceiver { public <init>(); }
+-dontwarn org.json.**

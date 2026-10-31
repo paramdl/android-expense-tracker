@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Expense Tracker UI Kit</title>
+<style>
+  /* ============================================================
+     Expense Tracker 1.5.1 — current UI, 1:1 from the Compose source.
+     Every value here is lifted from Theme.kt / Common.kt, so this file
+     is the design, not an impression of it.
+     Frames are 360 x 800 Android dp = 1 CSS px per dp.
+     ============================================================ */
+  :root {
+    --primary:#12805C; --onPrimary:#FFFFFF; --primaryContainer:#C9F2E1;
+    --tertiary:#C2553F; --tertiaryContainer:#FFDAD1;
+    --background:#FBFAF8; --onBackground:#16191C;
+    --surface:#FBFAF8; --onSurface:#16191C;
+    --surfaceVariant:#EDEFEB; --onSurfaceVariant:#474A46;
+    --outline:#B6BAB4; --outlineVariant:#DCDFD9;
+    --error:#B3261E;
+    --positive:#12805C; --negative:#C2553F;
+    --r-md:12px; --r-lg:14px; --r-xl:20px;
+    --font:Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#8E9A93; font-family:var(--font); }
+  .canvas { padding:56px; display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start; }
+
+  .frame { width:360px; height:800px; background:var(--background); color:var(--onSurface);
+           position:relative; overflow:hidden; border-radius:2px; }
+  .frame-label { font:600 13px var(--font); color:#0F1512; margin:0 0 10px 2px; letter-spacing:.02em; }
+  .screen { position:absolute; inset:0; display:flex; flex-direction:column; }
+
+  /* --- chrome ------------------------------------------------ */
+  .statusbar { height:28px; flex:0 0 28px; display:flex; align-items:center; justify-content:space-between;
+               padding:0 16px; font:500 12px var(--font); color:var(--onSurface); }
+  .appbar { height:56px; flex:0 0 56px; display:flex; align-items:center; gap:14px; padding:0 8px 0 16px; }
+  .appbar .back { font-size:20px; line-height:1; width:24px; text-align:center; }
+  .appbar h1 { margin:0; font:600 20px/26px var(--font); }
+  .body { flex:1 1 auto; overflow:hidden; padding:8px 16px 0; display:flex; flex-direction:column; gap:14px; }
+
+  .navbar { height:64px; flex:0 0 64px; display:flex; background:#F1ECF4; align-items:center; }
+  .navbar div { flex:1; text-align:center; font:500 11px/14px var(--font); color:var(--onSurfaceVariant); }
+  .navbar div .ic { display:block; font-size:16px; margin-bottom:3px; }
+  .navbar div.on { color:#111; }
+  .navbar div.on .ic { background:var(--primaryContainer); border-radius:999px; padding:2px 14px; }
+
+  /* --- primitives -------------------------------------------- */
+  .card { border:1px solid var(--outlineVariant); border-radius:var(--r-xl);
+          background:var(--surface); padding:18px; }
+  .title { font:600 16px/22px var(--font); }
+  .cap   { font:400 12px/16px var(--font); color:var(--onSurfaceVariant); }
+  .lbl   { font:500 11px/14px var(--font); letter-spacing:.4px; color:var(--onSurfaceVariant); }
+  .row   { display:flex; align-items:center; justify-content:space-between; }
+  .pills { display:flex; flex-wrap:wrap; gap:8px; }
+  .pill  { font:500 14px/18px var(--font); color:var(--onSurfaceVariant);
+           border:1px solid var(--outlineVariant); border-radius:999px; padding:8px 14px; white-space:nowrap; }
+  .pill.on { color:var(--primary); border-color:rgba(18,128,92,.5); background:rgba(18,128,92,.14); }
+  .pill.neg.on { color:var(--negative); border-color:rgba(194,85,63,.5); background:rgba(194,85,63,.14); }
+  .field { border:1px solid var(--outline); border-radius:var(--r-md); padding:14px;
+           font:400 16px/22px var(--font); color:var(--onSurfaceVariant); }
+  .cta { height:54px; border-radius:var(--r-lg); background:var(--primary); color:var(--onPrimary);
+         display:flex; align-items:center; justify-content:center; font:600 16px/22px var(--font); }
+  .cta.off { background:var(--surfaceVariant); color:#9A9E99; }
+  .fab { position:absolute; right:16px; bottom:80px; height:56px; padding:0 22px; border-radius:16px;
+         background:var(--primaryContainer); color:#0B3A28; display:flex; align-items:center; gap:8px;
+         font:600 16px var(--font); }
+  .tile-row { display:flex; gap:24px; }
+  .dot { width:7px; height:7px; border-radius:999px; display:inline-block; margin-right:7px; }
+  .money-pos { color:var(--positive); } .money-neg { color:var(--negative); }
+  .grow { flex:1 1 auto; }
+
+  /* ledger row */
+  .tx { display:flex; align-items:center; gap:12px; padding:8px 0; }
+  .tx .chip { width:38px; height:38px; border-radius:12px; background:var(--surfaceVariant);
+              display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .tx .nm { font:400 16px/22px var(--font); }
+  .tx .mt { font:400 12px/16px var(--font); color:var(--onSurfaceVariant); }
+  .tx .am { font:600 16px/22px var(--font); }
+
+  /* token sheet */
+  .sheet { width:776px; background:var(--background); padding:32px; border-radius:2px; }
+  .sheet h2 { font:600 20px var(--font); margin:0 0 4px; }
+  .sheet h3 { font:600 13px var(--font); letter-spacing:.5px; text-transform:uppercase;
+              color:var(--onSurfaceVariant); margin:28px 0 12px; }
+  .swatches { display:flex; flex-wrap:wrap; gap:12px; }
+  .sw { width:110px; }
+  .sw .chip { height:56px; border-radius:10px; border:1px solid var(--outlineVariant); }
+  .sw .n { font:500 11px/15px var(--font); margin-top:6px; }
+  .sw .v { font:400 10px/14px var(--font); color:var(--onSurfaceVariant); }
+  .type-row { display:flex; align-items:baseline; gap:16px; padding:6px 0;
+              border-bottom:1px solid var(--outlineVariant); }
+  .type-row .meta { font:400 11px var(--font); color:var(--onSurfaceVariant); width:210px; flex:0 0 210px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- ============================= 1. HOME ============================= -->
+  <div>
+    <p class="frame-label">01 · Home (Dashboard)</p>
+    <div class="frame"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮ ▮</span></div>
+      <div class="body">
+        <div class="row" style="padding:4px 8px;">
+          <span style="font-size:18px;">‹</span>
+          <span style="font:600 20px/26px var(--font);">September 2026</span>
+          <span style="font-size:18px;">›</span>
+        </div>
+        <div class="pills">
+          <span class="pill">Week</span><span class="pill on">Month</span>
+          <span class="pill">Year</span><span class="pill">All</span>
+        </div>
+
+        <div class="card">
+          <div class="cap">Balance this period</div>
+          <div style="font:500 34px/40px var(--font); letter-spacing:-.5px; color:var(--positive); margin:6px 0 16px;">₹0</div>
+          <div class="tile-row">
+            <div class="grow">
+              <div class="lbl"><span class="dot" style="background:var(--positive)"></span>EARNED</div>
+              <div style="font:600 20px/26px var(--font); margin-top:4px;">₹0</div>
+            </div>
+            <div class="grow">
+              <div class="lbl"><span class="dot" style="background:var(--negative)"></span>SPENT</div>
+              <div style="font:600 20px/26px var(--font); margin-top:4px;">₹0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row"><span class="title">Where the money went</span>
+            <span style="font:500 14px var(--font); color:var(--primary);">Report</span></div>
+          <div style="height:96px; display:flex; align-items:center; justify-content:center;">
+            <span class="cap">No spending recorded for this period yet.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">Income vs spending</div>
+          <div class="cap" style="margin-top:2px;">Last 6 months</div>
+          <div style="height:88px; display:flex; align-items:center; justify-content:center;">
+            <span class="cap">Add a few transactions to see the trend.</span>
+          </div>
+        </div>
+
+        <div class="card" style="padding-bottom:26px;">
+          <div class="title">Daily spending</div>
+          <div class="cap" style="margin-top:2px;">Last 30 days</div>
+        </div>
+      </div>
+      <div class="fab">＋ Add</div>
+      <div class="navbar">
+        <div class="on"><span class="ic">⌂</span>Home</div>
+        <div><span class="ic">☰</span>Ledger</div>
+        <div><span class="ic">▤</span>Reports</div>
+        <div><span class="ic">✉</span>SMS</div>
+        <div><span class="ic">⚙</span>Settings</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============================= 2. LEDGER ============================= -->
+  <div>
+    <p class="frame-label">02 · Ledger</p>
+    <div class="frame"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮ ▮</span></div>
+      <div class="body">
+        <div class="field">Search merchant, note, person, amount</div>
+        <div class="row" style="padding:0 4px;">
+          <span style="font-size:18px;">‹</span>
+          <span style="font:600 20px/26px var(--font);">September 2026</span>
+          <span style="font-size:18px;">›</span>
+        </div>
+        <div class="row" style="padding:0 4px;">
+          <span class="cap">4 transactions</span>
+          <span><span class="money-pos" style="font:600 14px var(--font);">+₹85,000</span>
+                <span class="money-neg" style="font:600 14px var(--font); margin-left:10px;">−₹3,991.25</span></span>
+        </div>
+
+        <div class="card" style="padding:14px 18px;">
+          <div class="row" style="padding-bottom:6px;">
+            <span class="lbl">FRI, 4 SEP 2026</span><span class="cap">−₹640.75</span>
+          </div>
+          <div class="tx">
+            <div class="chip">🛒</div>
+            <div class="grow"><div class="nm">Cafe Noir</div><div class="mt">Dining · Cash</div></div>
+            <div class="am money-neg">−₹640.75</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px 18px;">
+          <div class="row" style="padding-bottom:6px;">
+            <span class="lbl">THU, 3 SEP 2026</span><span class="cap">−₹2,100</span>
+          </div>
+          <div class="tx">
+            <div class="chip">📁</div>
+            <div class="grow"><div class="nm">HP Petrol</div><div class="mt">Fuel · Credit Card</div></div>
+            <div class="am money-neg">−₹2,100</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px 18px;">
+          <div class="row" style="padding-bottom:6px;">
+            <span class="lbl">WED, 2 SEP 2026</span><span class="cap">+₹85,000</span>
+          </div>
+          <div class="tx">
+            <div class="chip">💼</div>
+            <div class="grow"><div class="nm">Acme Corp</div><div class="mt">Salary · NEFT / IMPS</div></div>
+            <div class="am money-pos">+₹85,000</div>
+          </div>
+          <div class="tx">
+            <div class="chip">🛒</div>
+            <div class="grow"><div class="nm">Big Bazaar</div><div class="mt">Groceries · UPI</div></div>
+            <div class="am money-neg">−₹1,250.50</div>
+          </div>
+        </div>
+      </div>
+      <div class="fab">＋ Add</div>
+      <div class="navbar">
+        <div><span class="ic">⌂</span>Home</div>
+        <div class="on"><span class="ic">☰</span>Ledger</div>
+        <div><span class="ic">▤</span>Reports</div>
+        <div><span class="ic">✉</span>SMS</div>
+        <div><span class="ic">⚙</span>Settings</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============================= 3. ADD TRANSACTION ============================= -->
+  <div>
+    <p class="frame-label">03 · Add / Edit transaction</p>
+    <div class="frame"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">←</span><h1>New transaction</h1></div>
+      <div class="body">
+        <div class="pills" style="flex-wrap:nowrap;">
+          <span class="pill neg on grow" style="text-align:center;">💸 Expense</span>
+          <span class="pill grow" style="text-align:center;">💰 Income</span>
+          <span class="pill grow" style="text-align:center;">🔄 Transfer</span>
+        </div>
+
+        <div class="card">
+          <div class="cap">Amount spent</div>
+          <div style="display:flex; align-items:baseline; gap:6px; margin-top:6px;">
+            <span style="font:600 34px/40px var(--font); color:var(--negative);">₹</span>
+            <span style="font:500 34px/40px var(--font); color:var(--onSurfaceVariant);">0</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">Category</div>
+          <div class="pills" style="margin-top:12px;">
+            <span class="pill">🛒 Groceries</span><span class="pill on">🍽 Dining</span>
+            <span class="pill">⛽ Fuel</span><span class="pill">🏡 Rent</span>
+            <span class="pill">🎬 Entertainment</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">Account</div>
+          <div class="pills" style="margin-top:12px;">
+            <span class="pill on">🏦 Bank Account</span><span class="pill">💵 Cash</span>
+            <span class="pill">💳 Credit Card</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">How it was paid</div>
+          <div class="cap" style="margin-top:4px;">Optional. Tap “+ Add” on any row to record your own.</div>
+          <div class="row" style="margin-top:16px;">
+            <span class="lbl">MODE</span>
+            <span style="font:500 14px var(--font); color:var(--primary);">+ Add</span>
+          </div>
+          <div class="pills" style="margin-top:8px;">
+            <span class="pill">Cash</span><span class="pill on">Online</span><span class="pill">Card</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 16px 16px;"><div class="cta">Save transaction</div></div>
+    </div></div>
+  </div>
+
+  <!-- ============================= 4. RECURRING LIST ============================= -->
+  <div>
+    <p class="frame-label">04 · Recurring</p>
+    <div class="frame"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">←</span><h1>Recurring</h1></div>
+      <div class="body">
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:42px; height:42px; border-radius:13px; background:rgba(18,128,92,.16);
+                        display:flex; align-items:center; justify-content:center; font-size:19px;">🐷</div>
+            <div class="grow">
+              <div style="font:400 16px/22px var(--font);">Chit fund</div>
+              <div class="cap" style="margin-top:2px;">Every month · No end date</div>
+            </div>
+            <div style="font:600 16px/22px var(--font); color:var(--primary);">₹10,000</div>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <span class="lbl" style="color:var(--primary);">ACTIVE · NEXT ON 7 OCT</span>
+            <span><span style="font:500 14px var(--font); color:var(--onSurfaceVariant);">Pause</span>
+                  <span style="font:500 14px var(--font); color:var(--error); margin-left:16px;">Delete</span></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:42px; height:42px; border-radius:13px; background:rgba(194,85,63,.16);
+                        display:flex; align-items:center; justify-content:center; font-size:19px;">🔁</div>
+            <div class="grow">
+              <div style="font:400 16px/22px var(--font);">Netflix</div>
+              <div class="cap" style="margin-top:2px;">Every month · No end date</div>
+            </div>
+            <div style="font:600 16px/22px var(--font); color:var(--negative);">−₹649</div>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <span class="lbl" style="color:var(--primary);">ACTIVE · NEXT ON 8 OCT</span>
+            <span><span style="font:500 14px var(--font); color:var(--onSurfaceVariant);">Pause</span>
+                  <span style="font:500 14px var(--font); color:var(--error); margin-left:16px;">Delete</span></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:42px; height:42px; border-radius:13px; background:rgba(194,85,63,.16);
+                        display:flex; align-items:center; justify-content:center; font-size:19px;">🔁</div>
+            <div class="grow">
+              <div style="font:400 16px/22px var(--font);">Car EMI</div>
+              <div class="cap" style="margin-top:2px;">Every month · 8 of 36 paid</div>
+            </div>
+            <div style="font:600 16px/22px var(--font); color:var(--negative);">−₹18,400</div>
+          </div>
+          <div style="height:4px; border-radius:4px; background:var(--surfaceVariant); margin-top:12px;">
+            <div style="width:22%; height:4px; border-radius:4px; background:var(--negative);"></div>
+          </div>
+          <div class="row" style="margin-top:6px;">
+            <span class="cap">28 left</span><span class="cap">Total ₹6,62,400</span>
+          </div>
+        </div>
+      </div>
+      <div class="fab">＋ New</div>
+    </div></div>
+  </div>
+
+  <!-- ============================= 5. NEW RECURRING ============================= -->
+  <div>
+    <p class="frame-label">05 · New recurring (Savings)</p>
+    <div class="frame"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">←</span><h1>New recurring</h1></div>
+      <div class="body">
+        <div class="pills" style="flex-wrap:nowrap;">
+          <span class="pill neg grow" style="text-align:center;">💸 Expense</span>
+          <span class="pill on grow" style="text-align:center;">🐷 Savings</span>
+          <span class="pill grow" style="text-align:center;">💰 Income</span>
+        </div>
+
+        <div class="card">
+          <div class="field">Chit fund</div>
+          <div class="field" style="margin-top:14px;">Amount each time (₹)</div>
+        </div>
+
+        <div class="card">
+          <div class="title">How often</div>
+          <div class="pills" style="margin-top:12px;">
+            <span class="pill on">Monthly</span><span class="pill">Every 3 months</span>
+            <span class="pill">Yearly</span><span class="pill">Weekly</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">Starts and ends</div>
+          <div style="background:var(--surfaceVariant); border-radius:var(--r-md); padding:14px; margin-top:12px;"
+               class="row">
+            <span style="font:400 14px var(--font);">First payment</span>
+            <span style="font:500 14px var(--font); color:var(--primary);">Mon, 7 Sep 2026</span>
+          </div>
+          <div class="lbl" style="margin-top:14px;">ENDS</div>
+          <div class="pills" style="margin-top:8px;">
+            <span class="pill on">Never</span><span class="pill">After N payments</span>
+            <span class="pill">On a date</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">Money comes from</div>
+          <div class="pills" style="margin-top:12px;">
+            <span class="pill on">🏦 Bank Account</span><span class="pill">💵 Cash</span>
+          </div>
+          <div class="title" style="margin-top:18px;">Money goes to</div>
+          <div class="pills" style="margin-top:12px;">
+            <span class="pill on">🐷 Chit fund</span><span class="pill">💵 Cash</span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 16px 16px;"><div class="cta">Create recurring</div></div>
+    </div></div>
+  </div>
+
+  <!-- ============================= 6. SETTINGS ============================= -->
+  <div>
+    <p class="frame-label">06 · Settings</p>
+    <div class="frame"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>▮▮ ▮</span></div>
+      <div class="body" style="padding-top:16px;">
+        <div class="card">
+          <div class="title">Preferences</div>
+          <div class="row" style="margin-top:16px;">
+            <span style="font:400 16px var(--font);">Currency symbol</span>
+            <span style="font:500 16px var(--font); color:var(--primary);">₹</span>
+          </div>
+          <div class="row" style="margin-top:16px;">
+            <span style="font:400 16px var(--font);">Monthly budget</span>
+            <span style="font:500 16px var(--font); color:var(--onSurfaceVariant);">Not set</span>
+          </div>
+          <div class="lbl" style="margin-top:20px;">APPEARANCE</div>
+          <div class="pills" style="margin-top:8px;">
+            <span class="pill on">Light</span><span class="pill">Dark</span><span class="pill">System</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="title">Data</div>
+          <div class="cap" style="margin-top:4px;">Everything stays on your device unless you export it.</div>
+          <div class="row" style="margin-top:16px;">
+            <span style="font:400 16px var(--font);">Categories</span><span class="cap">31</span></div>
+          <div class="row" style="margin-top:14px;">
+            <span style="font:400 16px var(--font);">Accounts</span><span class="cap">5</span></div>
+          <div class="row" style="margin-top:14px;">
+            <span style="font:400 16px var(--font);">People</span><span class="cap">0</span></div>
+          <div class="row" style="margin-top:14px;">
+            <span style="font:400 16px var(--font);">Recurring transactions</span><span class="cap">2</span></div>
+          <div class="row" style="margin-top:14px;">
+            <span style="font:400 16px var(--font);">Import</span>
+            <span class="cap">File, paste or share</span></div>
+        </div>
+
+        <div class="card">
+          <div class="title">Backup &amp; Google Drive</div>
+          <div class="cap" style="margin-top:4px;">
+            Your data lives on this phone. Save a backup file to Google Drive, or to any folder you choose.</div>
+          <div class="cta" style="margin-top:14px; height:48px; font-size:15px;">Save backup to Drive or files</div>
+        </div>
+
+        <div class="cap" style="text-align:center;">Expense Tracker 1.5.1</div>
+      </div>
+      <div class="navbar">
+        <div><span class="ic">⌂</span>Home</div>
+        <div><span class="ic">☰</span>Ledger</div>
+        <div><span class="ic">▤</span>Reports</div>
+        <div><span class="ic">✉</span>SMS</div>
+        <div class="on"><span class="ic">⚙</span>Settings</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============================= TOKEN SHEET ============================= -->
+  <div>
+    <p class="frame-label">00 · Design system</p>
+    <div class="sheet">
+      <h2>Expense Tracker — design system</h2>
+      <div class="cap">Extracted from Theme.kt and Common.kt at v1.5.1. These are the live values.</div>
+
+      <h3>Light palette</h3>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#12805C"></div><div class="n">primary</div><div class="v">#12805C</div></div>
+        <div class="sw"><div class="chip" style="background:#C9F2E1"></div><div class="n">primaryContainer</div><div class="v">#C9F2E1</div></div>
+        <div class="sw"><div class="chip" style="background:#C2553F"></div><div class="n">tertiary / negative</div><div class="v">#C2553F</div></div>
+        <div class="sw"><div class="chip" style="background:#FFDAD1"></div><div class="n">tertiaryContainer</div><div class="v">#FFDAD1</div></div>
+        <div class="sw"><div class="chip" style="background:#FBFAF8"></div><div class="n">background / surface</div><div class="v">#FBFAF8</div></div>
+        <div class="sw"><div class="chip" style="background:#EDEFEB"></div><div class="n">surfaceVariant</div><div class="v">#EDEFEB</div></div>
+        <div class="sw"><div class="chip" style="background:#DCDFD9"></div><div class="n">outlineVariant</div><div class="v">#DCDFD9</div></div>
+        <div class="sw"><div class="chip" style="background:#16191C"></div><div class="n">onSurface</div><div class="v">#16191C</div></div>
+        <div class="sw"><div class="chip" style="background:#474A46"></div><div class="n">onSurfaceVariant</div><div class="v">#474A46</div></div>
+        <div class="sw"><div class="chip" style="background:#B3261E"></div><div class="n">error</div><div class="v">#B3261E</div></div>
+      </div>
+
+      <h3>Dark palette</h3>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#6FD3AC"></div><div class="n">primary</div><div class="v">#6FD3AC</div></div>
+        <div class="sw"><div class="chip" style="background:#005138"></div><div class="n">primaryContainer</div><div class="v">#005138</div></div>
+        <div class="sw"><div class="chip" style="background:#FFB4A1"></div><div class="n">tertiary</div><div class="v">#FFB4A1</div></div>
+        <div class="sw"><div class="chip" style="background:#FF9E85"></div><div class="n">negative</div><div class="v">#FF9E85</div></div>
+        <div class="sw"><div class="chip" style="background:#101312"></div><div class="n">background</div><div class="v">#101312</div></div>
+        <div class="sw"><div class="chip" style="background:#1D211F"></div><div class="n">surfaceVariant</div><div class="v">#1D211F</div></div>
+        <div class="sw"><div class="chip" style="background:#2B302D"></div><div class="n">outlineVariant</div><div class="v">#2B302D</div></div>
+        <div class="sw"><div class="chip" style="background:#E2E3DF"></div><div class="n">onSurface</div><div class="v">#E2E3DF</div></div>
+      </div>
+
+      <h3>Type scale</h3>
+      <div class="type-row"><span class="meta">displaySmall · 34/40 · Medium · −0.5</span>
+        <span style="font:500 34px/40px var(--font); letter-spacing:-.5px;">₹1,25,400</span></div>
+      <div class="type-row"><span class="meta">headlineMedium · 26/32 · SemiBold</span>
+        <span style="font:600 26px/32px var(--font);">Reports</span></div>
+      <div class="type-row"><span class="meta">titleLarge · 20/26 · SemiBold</span>
+        <span style="font:600 20px/26px var(--font);">New recurring</span></div>
+      <div class="type-row"><span class="meta">titleMedium · 16/22 · SemiBold</span>
+        <span style="font:600 16px/22px var(--font);">Where the money went</span></div>
+      <div class="type-row"><span class="meta">bodyLarge · 16/22 · Regular</span>
+        <span style="font:400 16px/22px var(--font);">Big Bazaar</span></div>
+      <div class="type-row"><span class="meta">bodyMedium · 14/20 · Regular</span>
+        <span style="font:400 14px/20px var(--font);">First payment</span></div>
+      <div class="type-row"><span class="meta">bodySmall · 12/16 · Regular — Caption</span>
+        <span style="font:400 12px/16px var(--font);">Every month · No end date</span></div>
+      <div class="type-row"><span class="meta">labelLarge · 14/18 · Medium — Pill</span>
+        <span style="font:500 14px/18px var(--font);">+ Add</span></div>
+      <div class="type-row"><span class="meta">labelSmall · 11/14 · Medium · 0.4 — field label</span>
+        <span style="font:500 11px/14px var(--font); letter-spacing:.4px;">MODE</span></div>
+
+      <h3>Components</h3>
+      <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start;">
+        <div style="width:300px;">
+          <div class="cap" style="margin-bottom:8px;">SectionCard — radius 20, border 1px outlineVariant, padding 18</div>
+          <div class="card"><div class="title">Card title</div>
+            <div class="cap" style="margin-top:4px;">Supporting caption line.</div></div>
+        </div>
+        <div style="width:300px;">
+          <div class="cap" style="margin-bottom:8px;">Pill — radius full, padding 14×8, 14% tint when selected</div>
+          <div class="pills"><span class="pill on">Selected</span><span class="pill">Default</span>
+            <span class="pill neg on">Expense</span></div>
+          <div class="cap" style="margin:16px 0 8px;">Primary CTA — height 54, radius 14</div>
+          <div class="cta">Save changes</div>
+          <div class="cap" style="margin:16px 0 8px;">Disabled CTA</div>
+          <div class="cta off">Create recurring</div>
+        </div>
+        <div style="width:300px;">
+          <div class="cap" style="margin-bottom:8px;">Text field — radius 12, 1px outline</div>
+          <div class="field">Name</div>
+          <div class="cap" style="margin:16px 0 8px;">Ledger row — 38px chip, radius 12</div>
+          <div class="tx"><div class="chip">🛒</div>
+            <div class="grow"><div class="nm">Big Bazaar</div><div class="mt">Groceries · UPI</div></div>
+            <div class="am money-neg">−₹1,250.50</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

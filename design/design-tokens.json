@@ -1,0 +1,107 @@
+{
+  "$description": "Expense Tracker 1.5.1 design tokens, extracted from app/src/main/java/com/expensetracker/ui/theme/Theme.kt and ui/components/Common.kt. Tokens Studio for Figma format: import via Plugins > Tokens Studio > Settings > Import.",
+  "light": {
+    "color": {
+      "primary":              { "value": "#12805C", "type": "color", "description": "Deep teal-green. Money in, primary actions." },
+      "onPrimary":            { "value": "#FFFFFF", "type": "color" },
+      "primaryContainer":     { "value": "#C9F2E1", "type": "color" },
+      "onPrimaryContainer":   { "value": "#00301F", "type": "color" },
+      "secondary":            { "value": "#4C6355", "type": "color" },
+      "onSecondary":          { "value": "#FFFFFF", "type": "color" },
+      "secondaryContainer":   { "value": "#CEE9D7", "type": "color" },
+      "onSecondaryContainer": { "value": "#092014", "type": "color" },
+      "tertiary":             { "value": "#C2553F", "type": "color", "description": "Warm clay. Money out." },
+      "onTertiary":           { "value": "#FFFFFF", "type": "color" },
+      "tertiaryContainer":    { "value": "#FFDAD1", "type": "color" },
+      "onTertiaryContainer":  { "value": "#3F0B02", "type": "color" },
+      "background":           { "value": "#FBFAF8", "type": "color", "description": "Warm off-white; never pure white." },
+      "onBackground":         { "value": "#16191C", "type": "color" },
+      "surface":              { "value": "#FBFAF8", "type": "color" },
+      "onSurface":            { "value": "#16191C", "type": "color" },
+      "surfaceVariant":       { "value": "#EDEFEB", "type": "color" },
+      "onSurfaceVariant":     { "value": "#474A46", "type": "color", "description": "Captions and meta text." },
+      "outline":              { "value": "#B6BAB4", "type": "color" },
+      "outlineVariant":       { "value": "#DCDFD9", "type": "color", "description": "Every card border." },
+      "error":                { "value": "#B3261E", "type": "color" },
+      "onError":              { "value": "#FFFFFF", "type": "color" },
+      "positive":             { "value": "#12805C", "type": "color", "description": "Income amounts." },
+      "negative":             { "value": "#C2553F", "type": "color", "description": "Expense amounts." }
+    }
+  },
+  "dark": {
+    "color": {
+      "primary":              { "value": "#6FD3AC", "type": "color" },
+      "onPrimary":            { "value": "#003824", "type": "color" },
+      "primaryContainer":     { "value": "#005138", "type": "color" },
+      "onPrimaryContainer":   { "value": "#8CF0C7", "type": "color" },
+      "secondary":            { "value": "#B3CCBC", "type": "color" },
+      "onSecondary":          { "value": "#1E3529", "type": "color" },
+      "secondaryContainer":   { "value": "#344B3E", "type": "color" },
+      "onSecondaryContainer": { "value": "#CEE9D7", "type": "color" },
+      "tertiary":             { "value": "#FFB4A1", "type": "color" },
+      "onTertiary":           { "value": "#5F1608", "type": "color" },
+      "tertiaryContainer":    { "value": "#7D2C1B", "type": "color" },
+      "onTertiaryContainer":  { "value": "#FFDAD1", "type": "color" },
+      "background":           { "value": "#101312", "type": "color" },
+      "onBackground":         { "value": "#E2E3DF", "type": "color" },
+      "surface":              { "value": "#101312", "type": "color" },
+      "onSurface":            { "value": "#E2E3DF", "type": "color" },
+      "surfaceVariant":       { "value": "#1D211F", "type": "color" },
+      "onSurfaceVariant":     { "value": "#C2C8C3", "type": "color" },
+      "outline":              { "value": "#5A605B", "type": "color" },
+      "outlineVariant":       { "value": "#2B302D", "type": "color" },
+      "error":                { "value": "#FFB4AB", "type": "color" },
+      "onError":              { "value": "#690005", "type": "color" },
+      "positive":             { "value": "#6FD3AC", "type": "color" },
+      "negative":             { "value": "#FF9E85", "type": "color" }
+    }
+  },
+  "global": {
+    "font": {
+      "family": { "value": "Roboto", "type": "fontFamilies", "description": "FontFamily.Default on Android is Roboto." },
+      "weight": {
+        "normal":   { "value": "Regular",  "type": "fontWeights" },
+        "medium":   { "value": "Medium",   "type": "fontWeights" },
+        "semibold": { "value": "SemiBold", "type": "fontWeights" }
+      }
+    },
+    "type": {
+      "displaySmall":   { "value": { "fontFamily": "Roboto", "fontWeight": "Medium",   "fontSize": "34", "lineHeight": "40", "letterSpacing": "-0.5" }, "type": "typography", "description": "Balance headline." },
+      "headlineMedium": { "value": { "fontFamily": "Roboto", "fontWeight": "SemiBold", "fontSize": "26", "lineHeight": "32", "letterSpacing": "-0.3" }, "type": "typography" },
+      "titleLarge":     { "value": { "fontFamily": "Roboto", "fontWeight": "SemiBold", "fontSize": "20", "lineHeight": "26", "letterSpacing": "0" },    "type": "typography", "description": "Top app bar." },
+      "titleMedium":    { "value": { "fontFamily": "Roboto", "fontWeight": "SemiBold", "fontSize": "16", "lineHeight": "22", "letterSpacing": "0" },    "type": "typography", "description": "Section titles, amounts." },
+      "bodyLarge":      { "value": { "fontFamily": "Roboto", "fontWeight": "Regular",  "fontSize": "16", "lineHeight": "22", "letterSpacing": "0" },    "type": "typography" },
+      "bodyMedium":     { "value": { "fontFamily": "Roboto", "fontWeight": "Regular",  "fontSize": "14", "lineHeight": "20", "letterSpacing": "0" },    "type": "typography" },
+      "bodySmall":      { "value": { "fontFamily": "Roboto", "fontWeight": "Regular",  "fontSize": "12", "lineHeight": "16", "letterSpacing": "0" },    "type": "typography", "description": "Caption component." },
+      "labelLarge":     { "value": { "fontFamily": "Roboto", "fontWeight": "Medium",   "fontSize": "14", "lineHeight": "18", "letterSpacing": "0" },    "type": "typography", "description": "Pills, links." },
+      "labelSmall":     { "value": { "fontFamily": "Roboto", "fontWeight": "Medium",   "fontSize": "11", "lineHeight": "14", "letterSpacing": "0.4" },  "type": "typography", "description": "ALL-CAPS field labels." }
+    },
+    "radius": {
+      "xs":   { "value": "4",  "type": "borderRadius" },
+      "sm":   { "value": "10", "type": "borderRadius" },
+      "md":   { "value": "12", "type": "borderRadius", "description": "Text fields, most surfaces." },
+      "lg":   { "value": "14", "type": "borderRadius", "description": "Primary buttons." },
+      "xl":   { "value": "20", "type": "borderRadius", "description": "SectionCard." },
+      "full": { "value": "999","type": "borderRadius", "description": "Pills." }
+    },
+    "space": {
+      "1": { "value": "2",  "type": "spacing" },
+      "2": { "value": "4",  "type": "spacing" },
+      "3": { "value": "6",  "type": "spacing" },
+      "4": { "value": "8",  "type": "spacing", "description": "Default gap between pills." },
+      "5": { "value": "10", "type": "spacing" },
+      "6": { "value": "12", "type": "spacing" },
+      "7": { "value": "14", "type": "spacing", "description": "Gap between cards." },
+      "8": { "value": "16", "type": "spacing", "description": "Screen side padding." },
+      "9": { "value": "18", "type": "spacing", "description": "SectionCard inner padding." }
+    },
+    "size": {
+      "border":       { "value": "1",  "type": "borderWidth" },
+      "rowIcon":      { "value": "38", "type": "sizing", "description": "Ledger row emoji chip." },
+      "ruleIcon":     { "value": "42", "type": "sizing", "description": "Recurring rule icon." },
+      "fieldHeight":  { "value": "48", "type": "sizing" },
+      "buttonHeight": { "value": "54", "type": "sizing", "description": "Primary CTA." },
+      "dot":          { "value": "7",  "type": "sizing", "description": "StatTile marker." }
+    }
+  }
+}

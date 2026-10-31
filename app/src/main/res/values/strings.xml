@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Expense Tracker</string>
+    <string name="widget_description">Spending this month, with a shortcut to add a transaction.</string>
+    <string name="shortcut_expense_short">Add</string>
+    <string name="shortcut_expense_long">Add a transaction</string>
+    <string name="shortcut_import_short">Import</string>
+    <string name="shortcut_import_long">Import from a message</string>
+</resources>
